@@ -47,7 +47,6 @@ function Payments() {
       });
 
       const data = await response.json();
-
       if (response.ok) {
         setMessage(`Payment successful! Transaction ID: ${data.transactionId}`);
       } else {
