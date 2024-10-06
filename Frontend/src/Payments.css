@@ -1,0 +1,51 @@
+.card {
+    width: 300px;
+    padding: 20px;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .card form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .card input, .card select, .card button {
+    margin-bottom: 15px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%; /* Makes the dropdown and inputs take full width */
+    box-sizing: border-box;
+  }
+  
+  .card select {
+    appearance: none; /* Removes default dropdown styling for uniform look */
+    background-color: #fff; /* Ensures consistent background */
+  }
+  
+  .card button {
+    background-color: #47bac9;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .card button:hover {
+    background-color: #3e9aa6;
+  }
+  
+  .card p {
+    color: red;
+    text-align: center;
+    margin-top: 10px;
+  }
+  
