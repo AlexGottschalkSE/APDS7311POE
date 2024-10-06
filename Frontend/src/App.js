@@ -4,14 +4,14 @@ import Register from "./Register";
 import Login from "./Login";
 import Dashboard from "./Dashboard";
 import "./App.css"; 
-
+import Payments from "./Payment";
 function NavBar() {
   const location = useLocation(); 
   return (
     <nav className="nav-bar">
       <ul>
        
-        {location.pathname !== "/dashboard" && (
+        {location.pathname !== "/dashboard" && (location.pathname !== "/payments") && (
           <>
             <li>
               <Link to="/register">Register</Link>
@@ -22,10 +22,14 @@ function NavBar() {
           </>
         )}
         {(location.pathname !== "/login") && (location.pathname !== "/register") && (
-        <li>
+        <><li>
           <Link to="/dashboard">Dashboard</Link>
           
         </li>
+        <li>
+        <Link to="/payments">Payments</Link> 
+      </li>
+      </>
         )}
       </ul>
     </nav>
@@ -38,9 +42,10 @@ function App() {
       <div className="app-container">
         <NavBar /> 
         <Routes>
-          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/payments" element={<Payments />} /> 
         </Routes>
       </div>
     </Router>
