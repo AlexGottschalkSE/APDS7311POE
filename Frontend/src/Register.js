@@ -51,7 +51,7 @@ function Register() {
         <input type="text" placeholder="Username" required />
         <input type="password" placeholder="Password" required />
         <ReCAPTCHA
-          sitekey="your-site-key" // Replace with your Google ReCaptcha site key
+          sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" // Replace with your Google ReCaptcha site key
           onChange={handleCaptchaChange}
         />
         <button type="submit">Register</button>
