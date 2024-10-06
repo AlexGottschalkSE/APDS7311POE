@@ -11,7 +11,7 @@ function Payments() {
     const currency = "ZAR";
     const provider = "sw";
     const accountNumber = "123123123";
-    const swiftCode = "123123123";
+    const swiftCode = "12312313";
 
     // Client-side validation
     if (amount <= 0) {
@@ -36,7 +36,7 @@ function Payments() {
       accountNumber,
       swiftCode,
     };
-    console.log(JSON.stringify(paymentData))
+    console.log(JSON.stringify(paymentData));
     try {
       const response = await fetch("http://localhost:5000/api/payment", {
         method: "POST",
@@ -45,9 +45,9 @@ function Payments() {
         },
         body: JSON.stringify(paymentData),
       });
-      
+
       const data = await response.json();
-      
+
       if (response.ok) {
         setMessage(`Payment successful! Transaction ID: ${data.transactionId}`);
       } else {
@@ -69,7 +69,12 @@ function Payments() {
           <option value="USD">USD</option>
           <option value="EUR">EUR</option>
         </select>
-        <input type="text" placeholder="Payment Provider" value="SWIFT" readOnly />
+        <input
+          type="text"
+          placeholder="Payment Provider"
+          value="SWIFT"
+          readOnly
+        />
         <input type="text" placeholder="Beneficiary Account Number" required />
         <input type="text" placeholder="Beneficiary SWIFT Code" required />
         <button type="submit">Submit Payment</button>
