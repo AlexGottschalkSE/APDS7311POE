@@ -27,7 +27,7 @@ function NavBar() {
           
         </li>
         <li>
-        <Link to="/payments">Payments</Link> {/* Add a link to payments */}
+        <Link to="/payments">Payments</Link> 
       </li>
       </>
         )}
@@ -45,7 +45,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/payments" element={<Payments />} /> {/* Define the route for Payments */}
+          <Route path="/payments" element={<Payments />} /> 
         </Routes>
       </div>
     </Router>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Payments.css"; // Optional if you have specific styles
+import "./Payments.css"; 
 
 function Payments() {
   const [message, setMessage] = useState("");
@@ -7,13 +7,12 @@ function Payments() {
   const handlePayment = async (e) => {
     e.preventDefault();
 
-    const amount = 1; // Parse as float
-    const currency = "ZAR";
-    const provider = "sw";
-    const accountNumber = "123123123";
-    const swiftCode = "12312313";
+    const amount = parseFloat(e.target[0].value);
+    const currency = e.target[1].value;
+    const provider = e.target[2].value;
+    const accountNumber = e.target[3].value;
+    const swiftCode = e.target[4].value;
 
-    // Client-side validation
     if (amount <= 0) {
       setMessage("Amount must be a positive number.");
       return;
@@ -30,13 +29,13 @@ function Payments() {
     }
 
     const paymentData = {
-      amount, // This is now a number
+      amount, 
       currency,
       provider,
       accountNumber,
       swiftCode,
     };
-    console.log(JSON.stringify(paymentData));
+
     try {
       const response = await fetch("http://localhost:5000/api/payment", {
         method: "POST",
@@ -45,7 +44,7 @@ function Payments() {
         },
         body: JSON.stringify(paymentData),
       });
-
+      
       const data = await response.json();
       if (response.ok) {
         setMessage(`Payment successful! Transaction ID: ${data.transactionId}`);
@@ -54,7 +53,7 @@ function Payments() {
       }
     } catch (error) {
       setMessage(`Error: ${error.message}`);
-      console.error("Fetch Error:", error); // Log any fetch errors
+      console.error("Fetch Error:", error); 
     }
   };
 
@@ -68,12 +67,7 @@ function Payments() {
           <option value="USD">USD</option>
           <option value="EUR">EUR</option>
         </select>
-        <input
-          type="text"
-          placeholder="Payment Provider"
-          value="SWIFT"
-          readOnly
-        />
+        <input type="text" placeholder="Payment Provider" value="SWIFT" readOnly />
         <input type="text" placeholder="Beneficiary Account Number" required />
         <input type="text" placeholder="Beneficiary SWIFT Code" required />
         <button type="submit">Submit Payment</button>

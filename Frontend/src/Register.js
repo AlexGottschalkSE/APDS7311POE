@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-import "./Register.css"; // Import CSS for styling
+import "./Register.css"; 
 
 function Register() {
   const [captchaVerified, setCaptchaVerified] = useState(false);
@@ -51,7 +51,7 @@ function Register() {
         <input type="text" placeholder="Username" required />
         <input type="password" placeholder="Password" required />
         <ReCAPTCHA
-          sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" // Replace with your Google ReCaptcha site key
+          sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" 
           onChange={handleCaptchaChange}
         />
         <button type="submit">Register</button>

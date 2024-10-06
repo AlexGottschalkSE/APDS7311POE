@@ -23,13 +23,13 @@
     font-size: 16px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    width: 100%; /* Makes the dropdown and inputs take full width */
+    width: 100%; 
     box-sizing: border-box;
   }
   
   .card select {
-    appearance: none; /* Removes default dropdown styling for uniform look */
-    background-color: #fff; /* Ensures consistent background */
+    appearance: none;
+    background-color: #fff; 
   }
   
   .card button {
