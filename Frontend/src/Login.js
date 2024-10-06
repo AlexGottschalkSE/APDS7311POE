@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 import "./Login.css"; // Import CSS for styling
 
 function Login() {
   const [message, setMessage] = useState("");
+  const navigate = useNavigate(); // Initialize navigate
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -27,6 +29,7 @@ function Login() {
       const data = await response.json();
       if (response.ok) {
         setMessage("Login successful!");
+        navigate("/dashboard"); // Navigate to the dashboard page
       } else {
         setMessage(`Login failed: ${data.message}`);
       }
