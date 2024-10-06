@@ -1,5 +1,6 @@
 const fs = require("fs");
-const http = require("http"); // Using http instead of https for now
+const http = require("http");
+const https = require("https");
 const express = require("express");
 const bcrypt = require("bcrypt");
 const helmet = require("helmet");
@@ -19,24 +20,39 @@ let users = [];
 app.post("/api/auth/register", async (req, res) => {
   const { username, password } = req.body;
 
+  // Validate that both username and password are present
+  if (!username || !password) {
+    return res.status(400).json({ message: "Username and password are required" });
+  }
+
   // Check if the user already exists in memory
   const userExists = users.find((user) => user.username === username);
   if (userExists)
     return res.status(400).json({ message: "User already exists" });
 
-  // Hash the password
-  const hashedPassword = await bcrypt.hash(password, 12);
+  try {
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 12);
 
-  // Save the new user in the array
-  users.push({ username, password: hashedPassword });
-  console.log(users);
+    // Save the new user in the array
+    users.push({ username, password: hashedPassword });
+    console.log(users);
 
-  res.status(201).json({ message: "User registered successfully" });
+    res.status(201).json({ message: "User registered successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Error registering user" });
+  }
 });
 
 // Login route
 app.post("/api/auth/login", async (req, res) => {
   const { username, password } = req.body;
+
+  // Check if username or password is missing
+  if (!username || !password) {
+    return res.status(400).json({ message: "Username and password are required" });
+  }
 
   // Find the user in memory
   const user = users.find((user) => user.username === username);
@@ -44,29 +60,40 @@ app.post("/api/auth/login", async (req, res) => {
     return res.status(400).json({ message: "User not found" });
   }
 
-  // Compare the password with the hashed password
-  const isPasswordValid = await bcrypt.compare(password, user.password);
-  if (!isPasswordValid) {
-    return res.status(400).json({ message: "Invalid credentials" });
-  }
+  try {
+    // Compare the password with the hashed password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
 
-  res.status(200).json({ message: "Login successful" });
+    res.status(200).json({ message: "Login successful" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Error logging in" });
+  }
 });
 
-// TODO: SSL setup (for when you're ready to use SSL certificates):
-/*
-const privateKey = fs.readFileSync("/path/to/privateKey.key", "utf8");
-const certificate = fs.readFileSync("/path/to/certificate.crt", "utf8");
+// Read the SSL certificate and key
+const privateKey = fs.readFileSync("C:/Users/sethd/Documents/University/Semester 6/Security/APDS7311POE/API/server.key", "utf8");
+const certificate = fs.readFileSync("C:/Users/sethd/Documents/University/Semester 6/Security/APDS7311POE/API/server.cert", "utf8");
+
 const credentials = { key: privateKey, cert: certificate };
 
-// Start HTTPS server
+// HTTPS server setup
 https.createServer(credentials, app).listen(443, () => {
   console.log("HTTPS Server running on port 443");
 });
-*/
 
-// For now, start the server using HTTP
-const PORT = 5000; // You can use any available port
-http.createServer(app).listen(PORT, () => {
-  console.log(`HTTP Server running on port ${PORT}`);
+// Optional: Redirect HTTP to HTTPS
+app.use((req, res, next) => {
+  if (req.secure) {
+    return next();
+  }
+  res.redirect(`https://${req.headers.host}${req.url}`);
+});
+
+// HTTP server to handle redirects (if necessary)
+http.createServer(app).listen(80, () => {
+  console.log("HTTP Server running on port 80, redirecting to HTTPS");
 });
