@@ -7,11 +7,11 @@ function Payments() {
   const handlePayment = async (e) => {
     e.preventDefault();
 
-    const amount = parseFloat(e.target[0].value); // Parse as float
-    const currency = e.target[1].value;
-    const provider = e.target[2].value;
-    const accountNumber = e.target[3].value;
-    const swiftCode = e.target[4].value;
+    const amount = 1; // Parse as float
+    const currency = "ZAR";
+    const provider = "sw";
+    const accountNumber = "123123123";
+    const swiftCode = "123123123";
 
     // Client-side validation
     if (amount <= 0) {
@@ -36,7 +36,7 @@ function Payments() {
       accountNumber,
       swiftCode,
     };
-
+    console.log(JSON.stringify(paymentData))
     try {
       const response = await fetch("http://localhost:5000/api/payment", {
         method: "POST",
@@ -47,7 +47,7 @@ function Payments() {
       });
       
       const data = await response.json();
-      console.log( await data)
+      
       if (response.ok) {
         setMessage(`Payment successful! Transaction ID: ${data.transactionId}`);
       } else {
