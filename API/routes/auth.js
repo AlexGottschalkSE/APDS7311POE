@@ -2,43 +2,78 @@ const express = require("express");
 const router = express.Router();
 const Joi = require("joi");
 const bcrypt = require("bcrypt");
-const User = require("../models/User");
-
 
 const schema = Joi.object({
-  username: Joi.string().min(3).max(30).alphanum().required(),
-  password: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")).required(),
+    username: Joi.string().min(3).max(30).alphanum().required(),
+    id: Joi.string().required(),
+    accountNumber: Joi.string().required(), 
+    password: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")).required(),
 });
 
 router.post("/register", async (req, res) => {
-  const { error } = schema.validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+    const { error } = schema.validate(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
 
-  const userExists = await User.findOne({ username: req.body.username });
-  if (userExists) return res.status(400).send("User already exists");
+    try {
+        const userRef = db.collection('users');
+        const userExistsQuery = await userRef.where('username', '==', req.body.username)
+            .where('id', '==', req.body.id)
+            .where('accountNumber', '==', req.body.accountNumber).get();
 
-  const hashedPassword = await bcrypt.hash(req.body.password, 12);
+        if (!userExistsQuery.empty) {
+            return res.status(400).send("User with the same username, ID, or account number already exists");
+        }
 
-  const user = new User({
-    username: req.body.username,
-    password: hashedPassword,
-  });
+        const hashedPassword = await bcrypt.hash(req.body.password, 12);
 
-  await user.save();
-  res.send("User registered successfully");
+        const userData = {
+            username: req.body.username,
+            id: req.body.id,
+            accountNumber: req.body.accountNumber,
+            password: hashedPassword,
+        };
+
+        await db.collection('users').doc(req.body.id).set(userData);
+
+        res.send("User registered successfully");
+    } catch (error) {
+        console.error("Error registering user:", error);
+        res.status(500).send("Error registering user");
+    }
 });
 
+module.exports = router;
+
+
 router.post("/login", async (req, res) => {
-  const { username, password } = req.body;
+    const { username, accountNumber, password } = req.body;
 
-  const user = await User.findOne({ username });
-  if (!user) return res.status(400).send("Invalid username or password");
+    if (!username || !accountNumber || !password) {
+        return res.status(400).send("Username, account number, and password are required");
+    }
 
-  const validPassword = await bcrypt.compare(password, user.password);
-  if (!validPassword)
-    return res.status(400).send("Invalid username or password");
+    try {
+        const userRef = db.collection('users');
+        const userQuery = await userRef.where('username', '==', username)
+            .where('accountNumber', '==', accountNumber).get();
 
-  res.send("Login successful");
+        if (userQuery.empty) {
+            return res.status(400).send("Invalid username, account number, or password");
+        }
+
+        const userDoc = userQuery.docs[0];
+        const user = userDoc.data();
+
+        const validPassword = await bcrypt.compare(password, user.password);
+        if (!validPassword) {
+            return res.status(400).send("Invalid username, account number, or password");
+        }
+
+        res.send("Login successful");
+    } catch (error) {
+        console.error("Error logging in:", error);
+        return res.status(500).send("Error logging in");
+    }
 });
 
 module.exports = router;
