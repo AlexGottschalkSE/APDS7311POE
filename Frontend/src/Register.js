@@ -17,10 +17,14 @@ function Register() {
     }
 
     const username = e.target[0].value;
-    const password = e.target[1].value;
+    const id = e.target[1].value;
+    const accountNumber = e.target[2].value;
+    const password = e.target[3].value;
 
     const userData = {
       username,
+      id,
+      accountNumber,
       password,
     };
 
@@ -48,7 +52,9 @@ function Register() {
     <div className="card">
       <h2>Register</h2>
       <form onSubmit={handleRegister}>
-        <input type="text" placeholder="Username" required />
+        <input type="text" placeholder="Full Name" required />
+        <input type="text" placeholder="ID" required />
+        <input type="text" placeholder="Account Number" required />
         <input type="password" placeholder="Password" required />
         <ReCAPTCHA
           sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"

@@ -7,106 +7,189 @@ const helmet = require("helmet");
 const cors = require("cors");
 const payments = require("./routes/payments");
 const app = express();
+const admin = require("firebase-admin");
+// Load the service account key using fs.readFileSync
+const serviceAccountKeyPath = "./apds-c658e-firebase-adminsdk-6jvhj-2ee7801be4.json";
+const serviceAccountKey = fs.readFileSync(serviceAccountKeyPath, "utf8");
+const serviceAccount = JSON.parse(serviceAccountKey);
 
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-let users = [];
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://apds-c658e-default-rtdb.europe-west1.firebasedatabase.app"
+});
+
+const db = admin.firestore();
+
 
 app.post("/api/auth/register", async (req, res) => {
-  const { username, password } = req.body;
+    const { username, id, accountNumber, password } = req.body;
 
-  if (!username || !password) {
-    return res
-      .status(400)
-      .json({ message: "Username and password are required" });
-  }
-
-  const userExists = users.find((user) => user.username === username);
-  if (userExists)
-    return res.status(400).json({ message: "User already exists" });
-
-  try {
-    const hashedPassword = await bcrypt.hash(password, 12);
-
-    users.push({ username, password: hashedPassword });
-    console.log(users);
-
-    res.status(201).json({ message: "User registered successfully" });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Error registering user" });
-  }
-});
-
-app.post("/api/auth/login", async (req, res) => {
-  const { username, password } = req.body;
-
-  if (!username || !password) {
-    return res
-      .status(400)
-      .json({ message: "Username and password are required" });
-  }
-
-  const user = users.find((user) => user.username === username);
-  if (!user) {
-    return res.status(400).json({ message: "User not found" });
-  }
-
-  try {
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      return res.status(400).json({ message: "Invalid credentials" });
+    if(!username || !id || !accountNumber || !password) {
+        return res.status(400).json({
+            message: "Full Name, ID, Account Number, and Password are required",
+        });
     }
 
-    res.status(200).json({ message: "Login successful" });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Error logging in" });
-  }
+    try {
+        const userRef = db.collection("users").doc(id);
+        const doc = await userRef.get();
+
+        if (doc.exists) {
+            return res.status(400).json({ message: "User already exists" });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 12);
+
+        const newUser = {
+            username,
+            id,
+            accountNumber,
+            password: hashedPassword,
+        };
+
+        // Save the user in Firestore
+        await userRef.set(newUser);
+        console.log(`User ${username} registered successfully`);
+
+        res.status(201).json({ message: "User registered successfully" });
+    } catch (error) {
+        console.error("Error registering user:", error);
+        res.status(500).json({ message: "Error registering user" });
+    }
 });
+
+
+app.post("/api/auth/login", async (req, res) => {
+    const { accountNumber, username, password } = req.body;
+
+    // Validate that all fields are provided
+    if (!accountNumber || !username || !password) {
+        return res.status(400).json({ message: "Account Number, Username, and Password are required." });
+    }
+
+    try {
+        const usersRef = db.collection("users");
+        const userSnapshot = await usersRef
+            .where("accountNumber", "==", accountNumber)
+            .where("username", "==", username)
+            .get();
+
+        // Log the result for debugging
+        console.log("User snapshot:", userSnapshot.docs);
+
+        // If no user is found
+        if (userSnapshot.empty) {
+            return res.status(400).json({ message: "Invalid credentials. User not found." });
+        }
+
+        // Get the user data (assuming there is only one match)
+        const userDoc = userSnapshot.docs[0];
+        const user = userDoc.data();
+
+        // Compare the password using bcrypt
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        if (!isPasswordValid) {
+            return res.status(400).json({ message: "Invalid credentials. Incorrect password." });
+        }
+
+        // Login successful
+        res.status(200).json({ message: "Login successful" });
+    } catch (error) {
+        console.error("Error logging in:", error);
+        return res.status(500).json({ message: "Error logging in" });
+    }
+});
+
+
+
 
 app.post("/api/payment", async (req, res) => {
-  const { amount, currency, provider, accountNumber, swiftCode } = req.body;
+    const { amount, currency, provider, swiftCode } = req.body;
 
-  if (!amount || !currency || !provider || !accountNumber || !swiftCode) {
-    return res.status(400).json({ message: "All fields are required." });
-  }
+    // Assuming the accountNumber is stored in local storage and sent as a header
+    const accountNumber = req.headers['account-number'];  // Get accountNumber from headers (sent from client)
 
-  if (amount <= 0) {
-    return res
-      .status(400)
-      .json({ message: "Amount must be a positive number." });
-  }
+    // Check for required fields
+    if (!amount || !currency || !provider || !accountNumber || !swiftCode) {
+        return res.status(400).json({ message: "All fields are required." });
+    }
 
-  if (!/^\d+$/.test(accountNumber)) {
-    return res.status(400).json({ message: "Account number must be numeric." });
-  }
+    if (amount <= 0) {
+        return res.status(400).json({ message: "Amount must be a positive number." });
+    }
 
-  if (!(swiftCode.length >= 8 && swiftCode.length <= 11)) {
-    return res
-      .status(400)
-      .json({ message: "SWIFT code must be between 8 and 11 characters." });
-  }
+    if (!/^\d+$/.test(accountNumber)) {
+        return res.status(400).json({ message: "Account number must be numeric." });
+    }
 
-  const transactionId = `TXN${Date.now()}`;
-  const paymentData = {
-    amount,
-    currency,
-    provider,
-    accountNumber,
-    swiftCode,
-    transactionId,
-  };
+    if (!(swiftCode.length >= 8 && swiftCode.length <= 11)) {
+        return res.status(400).json({ message: "SWIFT code must be between 8 and 11 characters." });
+    }
 
-  console.log("Payment processed:", paymentData);
+    const transactionId = `TXN${Date.now()}`;
+    const paymentData = {
+        amount,
+        currency,
+        provider,
+        accountNumber,
+        swiftCode,
+        transactionId,
+    };
 
-  res.status(201).json({
-    message: "Payment processed successfully.",
-    transactionId,
-  });
+    try {
+        // Fetch the user based on accountNumber
+        const usersRef = db.collection("users");
+        const userSnapshot = await usersRef.where("accountNumber", "==", accountNumber).get();
+
+        // If no user is found
+        if (userSnapshot.empty) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
+        // Get the user document
+        const userDoc = userSnapshot.docs[0].ref;
+
+        // Save payment under the user's payments subcollection
+        const paymentRef = userDoc.collection("payments").doc(transactionId);
+        await paymentRef.set(paymentData);
+
+        console.log(`Payment for accountNumber ${accountNumber} processed:`, paymentData);
+
+        res.status(201).json({
+            message: "Payment processed successfully.",
+            transactionId,
+        });
+    } catch (error) {
+        console.error("Error processing payment:", error);
+        res.status(500).json({ message: "Error processing payment" });
+    }
 });
+
+
+app.get("/api/payments/:accountNumber", async (req, res) => {
+    const { username } = req.params;
+
+    try {
+        const userRef = db.collection("users").doc(username);
+        const paymentsSnapshot = await userRef.collection("payments").get();
+
+        if (paymentsSnapshot.empty) {
+            return res.status(404).json({ message: "No payments found for user." });
+        }
+
+        const payments = paymentsSnapshot.docs.map(doc => doc.data());
+        res.status(200).json(payments);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error retrieving payments" });
+    }
+});
+
 
 const privateKey = fs.readFileSync("./server.key", "utf8");
 const certificate = fs.readFileSync("./server.crt", "utf8");
@@ -114,16 +197,16 @@ const certificate = fs.readFileSync("./server.crt", "utf8");
 const credentials = { key: privateKey, cert: certificate };
 
 https.createServer(credentials, app).listen(443, () => {
-  console.log("HTTPS Server running on port 443");
+    console.log("HTTPS Server running on port 443");
 });
 
 app.use((req, res, next) => {
-  if (req.secure) {
-    return next();
-  }
-  res.redirect(`https://${req.headers.host}${req.url}`);
+    if (req.secure) {
+        return next();
+    }
+    res.redirect(`https://${req.headers.host}${req.url}`);
 });
 
 http.createServer(app).listen(180, () => {
-  console.log("HTTP Server running on port 80, redirecting to HTTPS");
+    console.log("HTTP Server running on port 80, redirecting to HTTPS");
 });
