@@ -1,7 +1,7 @@
 const express = require("express");
 const Joi = require("joi");
 const router = express.Router();
-const Payment = require("../models/payment"); // Import your Payment model
+const Payment = require("../models/Payment"); // Import your Payment model
 
 // Joi Schema for payment validation
 const paymentSchema = Joi.object({

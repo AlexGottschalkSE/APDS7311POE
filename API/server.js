@@ -124,8 +124,8 @@ app.post("/api/payment", async (req, res) => {
 });
 
 // Read the SSL certificate and key
-const privateKey = fs.readFileSync("C:/Users/andre/source/repos/APDS7311POE/API/server.key", "utf8");
-const certificate = fs.readFileSync("C:/Users/andre/source/repos/APDS7311POE/API/server.cert", "utf8");
+const privateKey = fs.readFileSync("C:/Users/callu/OneDrive/Documents/GitHub/PROG7312_POE/APDS7311POE/API/server.key", "utf8");
+const certificate = fs.readFileSync("C:/Users/callu/OneDrive/Documents/GitHub/PROG7312_POE/APDS7311POE/API/server.cert", "utf8");
 
 const credentials = { key: privateKey, cert: certificate };
 
