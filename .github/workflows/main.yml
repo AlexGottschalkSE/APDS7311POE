@@ -21,12 +21,28 @@ jobs:
         with:
           node-version: '14'
 
-      - name: Install dependencies
+      # API Section
+      - name: Install API dependencies
         run: npm install
+        working-directory: ./api
 
-      - name: Run Snyk to check for vulnerabilities
+      - name: Run Snyk on API
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: |
           npx snyk auth $SNYK_TOKEN
           npx snyk test
+        working-directory: ./api
+
+      # Frontend Section
+      - name: Install Frontend dependencies
+        run: npm install
+        working-directory: ./frontend
+
+      - name: Run Snyk on Frontend
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: |
+          npx snyk auth $SNYK_TOKEN
+          npx snyk test
+        working-directory: ./frontend
