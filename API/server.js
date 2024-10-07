@@ -8,18 +8,20 @@ const cors = require("cors");
 const payments = require("./routes/payments");
 const app = express();
 const admin = require("firebase-admin");
-const serviceAccountKeyPath = "./apds-c658e-firebase-adminsdk-6jvhj-2ee7801be4.json";
+const serviceAccountKeyPath = "./apds-c658e-firebase-adminsdk-6jvhj-4d82d2b89f.json";
 const serviceAccountKey = fs.readFileSync(serviceAccountKeyPath, "utf8");
 const serviceAccount = JSON.parse(serviceAccountKey);
-
-app.use(helmet());
-app.use(cors());
-app.use(express.json());
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://apds-c658e-default-rtdb.europe-west1.firebasedatabase.app"
 });
+
+app.use(helmet());
+app.use(cors());
+app.use(express.json());
+
+
 
 const db = admin.firestore();
 
