@@ -27,4 +27,4 @@ jobs:
       - name: Run Snyk Security Scan
         uses: snyk/actions/node@master
         with:
-          snyk-token: ${{ secrets.SNYK_TOKEN }} 
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }} 
