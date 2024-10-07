@@ -1,25 +1,26 @@
 const express = require("express");
 const Joi = require("joi");
 const router = express.Router();
-const Payment = require("../models/Payment"); // Import your Payment model
 
-// Joi Schema for payment validation
+const Payment = require("../models/payment"); 
+
+
 const paymentSchema = Joi.object({
-  amount: Joi.number().greater(0).required(), // Positive number for amount
-  currency: Joi.string().valid("USD", "EUR", "ZAR").required(), // Currencies allowed
-  provider: Joi.string().min(2).max(50).required(), // Provider validation
-  accountNumber: Joi.string().min(8).max(20).required(), // Account number validation
-  swiftCode: Joi.string().length(8).required(), // SWIFT code length fixed
+  amount: Joi.number().greater(0).required(),
+  currency: Joi.string().valid("USD", "EUR", "ZAR").required(),
+  provider: Joi.string().min(2).max(50).required(),
+  accountNumber: Joi.string().min(8).max(20).required(), 
+  swiftCode: Joi.string().length(8).required(), 
 });
 
-// Payment Route
+
 router.post("/payment", async (req, res) => {
-  const { error } = paymentSchema.validate(req.body); // Validate request body
-  if (error) return res.status(400).send(error.details[0].message); // Return validation error
+  const { error } = paymentSchema.validate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
 
   const { amount, currency, provider, accountNumber, swiftCode } = req.body;
 
-  // Create a new payment instance
+ 
   const payment = new Payment({
     accountNumber,
     amount,
@@ -27,24 +28,24 @@ router.post("/payment", async (req, res) => {
     provider,
     swiftCode,
   });
-  const transactionId = generateTransactionId(); // Generate a transaction ID
+  const transactionId = generateTransactionId(); 
   try {
-    await payment.save(); // Save the payment to the database
+    await payment.save(); 
     res.status(201).send({
       message: "Payment successful",
-      transactionId: transactionId, // Assuming payment model creates a transaction ID
+      transactionId: transactionId,
       amount,
       currency,
       accountNumber,
     });
   } catch (err) {
-    console.error(err); // Log the error
+    console.error(err); 
     res.status(500).send("Payment processing failed. Please try again.");
   }
 });
 
 const generateTransactionId = () => {
-  return Math.random().toString(36).substring(2, 15); // Generate a random string
+  return Math.random().toString(36).substring(2, 15);
 };
 
-module.exports = router; // Export the router
+module.exports = router;
