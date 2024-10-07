@@ -30,8 +30,8 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: |
-          npx snyk auth $SNYK_TOKEN
-          npx snyk test
+         npx snyk auth $SNYK_TOKEN
+         npx snyk test --policy-file=snyk.policy
         working-directory: API
 
       # Frontend Section
@@ -44,5 +44,5 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: |
           npx snyk auth $SNYK_TOKEN
-          npx snyk test
+          npx snyk test  --policy-file=snyk.policy
         working-directory: Frontend
