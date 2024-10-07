@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-import "./Register.css"; 
+import "./Register.css";
 
 function Register() {
   const [captchaVerified, setCaptchaVerified] = useState(false);
@@ -25,7 +25,7 @@ function Register() {
     };
 
     try {
-      const response = await fetch("https://localhost:443/api/auth/register",{
+      const response = await fetch("https://localhost:443/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -51,7 +51,7 @@ function Register() {
         <input type="text" placeholder="Username" required />
         <input type="password" placeholder="Password" required />
         <ReCAPTCHA
-          sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" 
+          sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
           onChange={handleCaptchaChange}
         />
         <button type="submit">Register</button>

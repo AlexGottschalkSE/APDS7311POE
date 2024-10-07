@@ -5,23 +5,22 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const helmet = require("helmet");
 const cors = require("cors");
-const payments = require("./routes/payments"); 
+const payments = require("./routes/payments");
 const app = express();
 
-app.use(helmet()); 
-app.use(cors()); 
+app.use(helmet());
+app.use(cors());
 app.use(express.json());
 
-
 let users = [];
-
 
 app.post("/api/auth/register", async (req, res) => {
   const { username, password } = req.body;
 
-
   if (!username || !password) {
-    return res.status(400).json({ message: "Username and password are required" });
+    return res
+      .status(400)
+      .json({ message: "Username and password are required" });
   }
 
   const userExists = users.find((user) => user.username === username);
@@ -45,7 +44,9 @@ app.post("/api/auth/login", async (req, res) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
-    return res.status(400).json({ message: "Username and password are required" });
+    return res
+      .status(400)
+      .json({ message: "Username and password are required" });
   }
 
   const user = users.find((user) => user.username === username);
@@ -65,7 +66,6 @@ app.post("/api/auth/login", async (req, res) => {
     return res.status(500).json({ message: "Error logging in" });
   }
 });
-
 
 app.post("/api/payment", async (req, res) => {
   const { amount, currency, provider, accountNumber, swiftCode } = req.body;
@@ -90,8 +90,7 @@ app.post("/api/payment", async (req, res) => {
       .json({ message: "SWIFT code must be between 8 and 11 characters." });
   }
 
-
-  const transactionId = `TXN${Date.now()}`; 
+  const transactionId = `TXN${Date.now()}`;
   const paymentData = {
     amount,
     currency,
@@ -101,7 +100,6 @@ app.post("/api/payment", async (req, res) => {
     transactionId,
   };
 
- 
   console.log("Payment processed:", paymentData);
 
   res.status(201).json({
@@ -110,9 +108,8 @@ app.post("/api/payment", async (req, res) => {
   });
 });
 
-// Read the SSL certificate and key
-const privateKey = fs.readFileSync("C:/Users/callu/OneDrive/Documents/GitHub/PROG7312_POE/APDS7311POE/API/server.key", "utf8");
-const certificate = fs.readFileSync("C:/Users/callu/OneDrive/Documents/GitHub/PROG7312_POE/APDS7311POE/API/server.cert", "utf8");
+const privateKey = fs.readFileSync("./server.key", "utf8");
+const certificate = fs.readFileSync("./server.crt", "utf8");
 
 const credentials = { key: privateKey, cert: certificate };
 
@@ -127,7 +124,6 @@ app.use((req, res, next) => {
   res.redirect(`https://${req.headers.host}${req.url}`);
 });
 
-http.createServer(app).listen(80, () => {
+http.createServer(app).listen(180, () => {
   console.log("HTTP Server running on port 80, redirecting to HTTPS");
-
 });

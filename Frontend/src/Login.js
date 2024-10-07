@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; 
-import "./Login.css"; 
+import { useNavigate } from "react-router-dom";
+import "./Login.css";
 
 function Login() {
   const [message, setMessage] = useState("");
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -29,7 +29,7 @@ function Login() {
       const data = await response.json();
       if (response.ok) {
         setMessage("Login successful!");
-        navigate("/dashboard"); 
+        navigate("/dashboard");
       } else {
         setMessage(`Login failed: ${data.message}`);
       }
