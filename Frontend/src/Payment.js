@@ -10,15 +10,8 @@ function Payments() {
     const amount = parseFloat(e.target[0].value);
     const currency = e.target[1].value;
     const provider = e.target[2].value;
-    const swiftCode = e.target[3].value;
-
-    // Retrieve accountNumber from localStorage
-    const accountNumber = localStorage.getItem('accNo');
-
-    if (!accountNumber) {
-      setMessage("Account number not found in localStorage.");
-      return;
-    }
+    const accountNumber = e.target[3].value;
+    const swiftCode = e.target[4].value;
 
     if (amount <= 0) {
       setMessage("Amount must be a positive number.");
@@ -39,6 +32,7 @@ function Payments() {
       amount, 
       currency,
       provider,
+      accountNumber,
       swiftCode,
     };
 
@@ -47,7 +41,6 @@ function Payments() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "account-number": accountNumber, // Send accountNumber from localStorage as a header
         },
         body: JSON.stringify(paymentData),
       });
@@ -75,6 +68,7 @@ function Payments() {
           <option value="EUR">EUR</option>
         </select>
         <input type="text" placeholder="Payment Provider" value="SWIFT" readOnly />
+        <input type="text" placeholder="Beneficiary Account Number" required />
         <input type="text" placeholder="Beneficiary SWIFT Code" required />
         <button type="submit">Submit Payment</button>
       </form>
