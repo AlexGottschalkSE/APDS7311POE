@@ -12,7 +12,6 @@ function Payments() {
     const provider = e.target[2].value;
     const swiftCode = e.target[3].value;
 
-    // Retrieve accountNumber from localStorage
     const accountNumber = localStorage.getItem('accNo');
 
     if (!accountNumber) {
@@ -47,7 +46,7 @@ function Payments() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "account-number": accountNumber, // Send accountNumber from localStorage as a header
+          "account-number": accountNumber, 
         },
         body: JSON.stringify(paymentData),
       });

@@ -160,22 +160,22 @@ app.post("/api/payment", async (req, res) => {
 
 
 app.get("/api/payments/:accountNumber", async (req, res) => {
-    const { username } = req.params;
+  const { accountNumber } = req.params;  
 
-    try {
-        const userRef = db.collection("users").doc(username);
-        const paymentsSnapshot = await userRef.collection("payments").get();
+  try {
+      const userRef = db.collection("users").doc(accountNumber);  
+      const paymentsSnapshot = await userRef.collection("payments").get();
 
-        if (paymentsSnapshot.empty) {
-            return res.status(404).json({ message: "No payments found for user." });
-        }
+      if (paymentsSnapshot.empty) {
+          return res.status(404).json({ message: "No payments found for this account." });
+      }
 
-        const payments = paymentsSnapshot.docs.map(doc => doc.data());
-        res.status(200).json(payments);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Error retrieving payments" });
-    }
+      const payments = paymentsSnapshot.docs.map(doc => doc.data());
+      res.status(200).json(payments);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Error retrieving payments" });
+  }
 });
 
 

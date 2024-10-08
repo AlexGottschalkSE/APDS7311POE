@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Link, useLocation } from "react
 import Register from "./Register";
 import Login from "./Login";
 import Dashboard from "./Dashboard";
+import History from "./History"
 import "./App.css"; 
 import Payments from "./Payment";
 function NavBar() {
@@ -11,7 +12,7 @@ function NavBar() {
     <nav className="nav-bar">
       <ul>
        
-        {location.pathname !== "/dashboard" && (location.pathname !== "/payments") && (
+        {location.pathname !== "/dashboard" && (location.pathname !== "/payments") && (location.pathname !== "/history") && (
           <>
             <li>
               <Link to="/register">Register</Link>
@@ -29,7 +30,11 @@ function NavBar() {
         <li>
         <Link to="/payments">Payments</Link> 
       </li>
+      <li>
+        <Link to="/history">History</Link> 
+      </li>
       </>
+      
         )}
       </ul>
     </nav>
@@ -46,6 +51,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/payments" element={<Payments />} /> 
+          <Route path="/history" element={<History />}/>
         </Routes>
       </div>
     </Router>
