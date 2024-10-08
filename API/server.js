@@ -8,7 +8,7 @@ const cors = require("cors");
 const payments = require("./routes/payments");
 const app = express();
 const admin = require("firebase-admin");
-const serviceAccountKeyPath = "./apds-c658e-firebase-adminsdk-6jvhj-4d82d2b89f.json";
+const serviceAccountKeyPath = "./apds-c658e-firebase-adminsdk-6jvhj-f7159291d6.json";
 const serviceAccountKey = fs.readFileSync(serviceAccountKeyPath, "utf8");
 const serviceAccount = JSON.parse(serviceAccountKey);
 
