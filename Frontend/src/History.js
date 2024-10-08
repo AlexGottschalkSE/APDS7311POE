@@ -1,15 +1,22 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"; 
 import "./History.css"; 
 
 const History = () => {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+  const navigate = useNavigate(); 
+  const [message, setMessage] = useState("");
   const accountNumber = localStorage.getItem("accNo");
 
   useEffect(() => {
+
+    if (!accountNumber) {
+      setMessage("Redirecting to login...");
+      navigate("/login");  
+    }
     if (accountNumber) {
       axios
         .get(`https://localhost:443/api/payments/${accountNumber}`)

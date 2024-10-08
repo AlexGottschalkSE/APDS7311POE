@@ -1,8 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";  
 import "./Payments.css"; 
 
 function Payments() {
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
+  useEffect(() => {
+    const accountNumber = localStorage.getItem("accNo");
+     
+    if (!accountNumber) {
+      setMessage("Redirecting to login...");
+      navigate("/login");  
+    }
+  }, [navigate]); 
 
   const handlePayment = async (e) => {
     e.preventDefault();
