@@ -1,5 +1,7 @@
 APDS7311 POE README
-GitHub repo Link:
+
+GitHub repo Link: https://github.com/AlexGottschalkSE/APDS7311POE
+
 Video Submission Link: https://youtu.be/sqeeRX1bqds
 
 Running the program:
