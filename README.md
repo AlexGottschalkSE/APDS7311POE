@@ -42,6 +42,7 @@ The program is run locally, but the database is hosted via Firebase.
 Using the Program:
 Upon startup of the application, the user is presented with the options to either register or login. If markers wish to make use of an existing login please use the following login details:
 "accountNumber":"1234","username":"Test","password":"Password1"
+
 Otherwise, the user can register their own account. The user must enter valid information, as if any information is missing or invalid, the user will be prompted to correct the missing details.
 Upon logging in the user will be presented with the option to make a payment, upon entering valid payment details, as invalid details will make the application prompt the user to renter the payment details, the payment will be saved and a transaction ID will be presented.
 From the dashboard, the user can also navigate to the Transaction History page. Upon loading the page, the application will display all previous transaction made by the currently logged in user.
