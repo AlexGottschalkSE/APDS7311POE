@@ -1,11 +1,10 @@
-# This config was automatically generated from your source code
-# Stacks detected: cicd:github-actions:.github/workflows,deps:node:API
 version: 2.1
 orbs:
   node: circleci/node@5
+  sonarcloud: sonarsource/sonarcloud@1.1.1
+
 jobs:
   test-node:
-    # Install node dependencies and run tests
     executor: node/default
     working_directory: ~/project/API
     steps:
@@ -15,23 +14,49 @@ jobs:
           pkg-manager: npm
       - run:
           name: Run tests
-          command: echo \"No test specified in package.json\"
+          command: echo "No test specified in package.json"
+
+  sonarcloud_scan:
+    docker:
+      - image: sonarsource/sonar-scanner-cli
+    resource_class: small
+    steps:
+      - checkout:
+          path: ~/project
+      - attach_workspace:
+          at: ~/workspace
+      - run:
+          name: Run SonarCloud Scan
+          command: |
+            echo "Sonar branch value is: ${CIRCLE_BRANCH-master}"
+            echo "Sonar org value is: $SONAR_ORG"
+            sonar-scanner \
+              -Dsonar.projectKey="$SONAR_PROJECT_KEY" \
+              -Dsonar.organization="$SONAR_ORG" \
+              -Dsonar.host.url="https://sonarcloud.io" \
+              -Dsonar.login="$SONAR_TOKEN" \
+              -Dsonar.branch.name="${CIRCLE_BRANCH}" \
+              -Dsonar.exclusions="**/android/**,**/ios/**" \
+              -Dsonar.sources="."
+
   deploy:
-    # This is an example deploy job, not actually used by the workflow
     docker:
       - image: cimg/base:stable
     steps:
-      # Replace this with steps to deploy to users
       - run:
           name: deploy
-          command: '#e.g. ./deploy.sh'
+          command: '#e.g. deploy.sh'
       - run:
           name: found github actions config
           command: ':'
+
 workflows:
   build-and-test:
     jobs:
       - test-node
+      - sonarcloud_scan:
+          requires:
+            - test-node
     # - deploy:
     #     requires:
     #       - test-node
