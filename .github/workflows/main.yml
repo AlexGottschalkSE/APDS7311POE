@@ -46,3 +46,15 @@ jobs:
           npx snyk auth $SNYK_TOKEN
           npx snyk test  --policy-file=snyk.policy
         working-directory: Frontend
+
+             # Run SonarCloud on API
+      - name: SonarCloud Analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          sonar-scanner \
+            -Dsonar.projectKey=AndrewTroll_APDS7311POE \
+            -Dsonar.sources=. \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=$SONAR_TOKEN
+        working-directory: API
