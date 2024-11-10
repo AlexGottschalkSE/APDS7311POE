@@ -27,7 +27,7 @@ function Register() {
       id,
       accountNumber,
       password,
-      userType, // Include userType in the request
+      userType, 
     };
 
     try {
@@ -41,9 +41,9 @@ function Register() {
 
       const data = await response.json();
       if (response.ok) {
-        alert("Registration Successful!");
+        alert("Creation of Account Successful!");
       } else {
-        alert("Registration Failed: " + data.message);
+        alert("Creation of Account Failed: " + data.message);
       }
     } catch (error) {
       alert("Error: " + error.message);
@@ -52,7 +52,7 @@ function Register() {
 
   return (
     <div className="card">
-      <h2>Register</h2>
+      <h2>Create an Account</h2>
       <form onSubmit={handleRegister}>
         <input type="text" placeholder="Full Name" required />
         <input type="text" placeholder="ID" required />

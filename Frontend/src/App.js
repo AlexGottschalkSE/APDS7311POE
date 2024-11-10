@@ -13,24 +13,21 @@ import "./App.css";
 function NavBar() {
   const location = useLocation();
   const userType = localStorage.getItem("userType"); // Retrieve userType from localStorage
-  console.log("User Type: ", userType);
+
   return (
     <nav className="nav-bar">
       <ul>
-        {/* Conditional Rendering for Register and Login Links */}
-        {userType !== "User" && location.pathname !== "/dashboard" && location.pathname !== "/payments" && location.pathname !== "/history" && (
+        {/* Show Login and Register links only if userType is null (user not logged in) */}
+        {!userType && (
           <>
-            <li>
-              <Link to="/register">Register</Link>
-            </li>
             <li>
               <Link to="/login">Login</Link>
             </li>
           </>
         )}
         
-        {/* Common Links */}
-        {location.pathname !== "/login" && location.pathname !== "/register" && (
+        {/* Common Links for all logged-in users */}
+        {userType && location.pathname !== "/login" && location.pathname !== "/register" && (
           <>
             <li>
               <Link to="/dashboard">Dashboard</Link>
@@ -44,9 +41,11 @@ function NavBar() {
 
             {/* Conditionally Render Approve Payments Link for Employees */}
             {userType === "Employee" && (
-              <li>
-                <Link to="/approve">Approve Payments</Link> 
-              </li>
+                          <><li>
+                <Link to="/register">Create A new User</Link>
+              </li><li>
+                  <Link to="/approve">Approve Payments</Link>
+                </li></>
             )}
           </>
         )}
@@ -58,8 +57,13 @@ function NavBar() {
 function ProtectedRoute({ children, allowedUserType }) {
   const userType = localStorage.getItem("userType");
 
+  // Redirect to login if userType is not set (i.e., user is not logged in) and accessing a protected route
+  if (!userType && allowedUserType) {
+    return <Navigate to="/login" replace />;
+  }
+
   // Redirect if userType does not match allowedUserType
-  if (userType !== allowedUserType) {
+  if (allowedUserType && userType !== allowedUserType) {
     return <Navigate to="/dashboard" replace />;
   }
 
@@ -73,8 +77,8 @@ function App() {
         <NavBar /> 
         <Routes>
           {/* Public Routes */}
-          <Route path="/register" element={<ProtectedRoute allowedUserType="Employee"><Register /></ProtectedRoute>} />
-          <Route path="/login" element={<ProtectedRoute allowedUserType="Employee"><Login /></ProtectedRoute>} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
 
           {/* Common Routes */}
           <Route path="/dashboard" element={<Dashboard />} />
