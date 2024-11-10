@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes, Link, useLocation, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Link, useLocation, Navigate, useNavigate } from "react-router-dom";
 import Register from "./Register";
 import Login from "./Login";
 import Dashboard from "./Dashboard";
@@ -12,18 +12,23 @@ import "./App.css";
 
 function NavBar() {
   const location = useLocation();
+  const navigate = useNavigate();
   const userType = localStorage.getItem("userType"); // Retrieve userType from localStorage
+
+  // Logout function
+  const handleLogout = () => {
+    localStorage.removeItem("userType"); // Clear userType from localStorage
+    navigate("/login"); // Redirect to login page
+  };
 
   return (
     <nav className="nav-bar">
       <ul>
-        {/* Show Login and Register links only if userType is null (user not logged in) */}
+        {/* Show Login link only if userType is null (user not logged in) */}
         {!userType && (
-          <>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-          </>
+          <li>
+            <Link to="/login">Login</Link>
+          </li>
         )}
         
         {/* Common Links for all logged-in users */}
@@ -41,12 +46,25 @@ function NavBar() {
 
             {/* Conditionally Render Approve Payments Link for Employees */}
             {userType === "Employee" && (
-                          <><li>
-                <Link to="/register">Create A new User</Link>
-              </li><li>
+              <>
+                <li>
+                  <Link to="/register">Create A new User</Link>
+                </li>
+                <li>
                   <Link to="/approve">Approve Payments</Link>
-                </li></>
+                </li>
+              </>
             )}
+
+            {/* Logout Link */}
+            <li>
+              <span 
+                onClick={handleLogout} 
+                style={{ cursor: 'pointer', textDecoration: 'underline', color: 'blue' }}
+              >
+                Logout
+              </span>
+            </li>
           </>
         )}
       </ul>
