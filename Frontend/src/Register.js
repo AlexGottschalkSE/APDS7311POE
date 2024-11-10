@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
 import "./Register.css";
 
 function Register() {
   const [captchaVerified, setCaptchaVerified] = useState(false);
+  const navigate = useNavigate();
 
   const handleCaptchaChange = (value) => {
     setCaptchaVerified(true);
@@ -41,9 +43,12 @@ function Register() {
 
       const data = await response.json();
       if (response.ok) {
-        alert("Creation of Account Successful!");
+        alert("Account creation successful!");
+
+        // Optionally redirect back to the dashboard or another page
+        navigate("/EmployeeDashboard");
       } else {
-        alert("Creation of Account Failed: " + data.message);
+        alert("Account creation failed: " + data.message);
       }
     } catch (error) {
       alert("Error: " + error.message);
