@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Joi = require("joi");
+const rateLimit = require("express-rate-limit");
 const bcrypt = require("bcryptjs");
 
 const schema = Joi.object({
@@ -16,7 +17,7 @@ const loginLimiter = rateLimit({
   message: "Too many login attempts. Please try again later.",
 });
 
-router.post("/register", async (req, res) => {
+router.post("/register", loginLimiter, async (req, res) => {
   const { error } = schema.validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -57,7 +58,7 @@ router.post("/register", async (req, res) => {
 
 module.exports = router;
 
-router.post("/login", async (req, res) => {
+router.post("/login", loginLimiter, async (req, res) => {
   const { username, accountNumber, password } = req.body;
 
   if (!username || !accountNumber || !password) {
