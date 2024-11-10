@@ -25,11 +25,11 @@ app.use(express.json());
 const db = admin.firestore();
 
 app.post("/api/auth/register", async (req, res) => {
-  const { username, id, accountNumber, password } = req.body;
+  const { username, id, accountNumber, password, userType } = req.body; // Add userType to destructuring
 
-  if (!username || !id || !accountNumber || !password) {
+  if (!username || !id || !accountNumber || !password || !userType) { // Validate userType
     return res.status(400).json({
-      message: "Full Name, ID, Account Number, and Password are required",
+      message: "Full Name, ID, Account Number, Password, and User Type are required",
     });
   }
 
@@ -43,13 +43,12 @@ app.post("/api/auth/register", async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    // Set userType as "User" by default
     const newUser = {
       username,
       id,
       accountNumber,
       password: hashedPassword,
-      userType: "User", // Default user type
+      userType, // Set userType from the request
     };
 
     await userRef.set(newUser);
@@ -61,6 +60,7 @@ app.post("/api/auth/register", async (req, res) => {
     res.status(500).json({ message: "Error registering user" });
   }
 });
+
 
 
 app.post("/api/auth/login", async (req, res) => {

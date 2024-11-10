@@ -20,12 +20,14 @@ function Register() {
     const id = e.target[1].value;
     const accountNumber = e.target[2].value;
     const password = e.target[3].value;
+    const userType = e.target[4].value; // Get userType from the dropdown
 
     const userData = {
       username,
       id,
       accountNumber,
       password,
+      userType, // Include userType in the request
     };
 
     try {
@@ -56,6 +58,13 @@ function Register() {
         <input type="text" placeholder="ID" required />
         <input type="text" placeholder="Account Number" required />
         <input type="password" placeholder="Password" required />
+        
+        <select required>
+          <option value="">Select User Type</option>
+          <option value="User">User</option>
+          <option value="Employee">Employee</option>
+        </select>
+        
         <ReCAPTCHA
           sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
           onChange={handleCaptchaChange}
