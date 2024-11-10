@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes, Link, useLocation } from "react-router-dom";
-import Register from "./Register";
 import Login from "./Login";
 import Dashboard from "./Dashboard";
 import History from "./History"
@@ -14,9 +13,6 @@ function NavBar() {
        
         {location.pathname !== "/dashboard" && (location.pathname !== "/payments") && (location.pathname !== "/history") && (
           <>
-            <li>
-              <Link to="/register">Register</Link>
-            </li>
             <li>
               <Link to="/login">Login</Link>
             </li>
@@ -47,7 +43,6 @@ function App() {
       <div className="app-container">
         <NavBar /> 
         <Routes>
-          <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/payments" element={<Payments />} /> 
