@@ -27,14 +27,21 @@ function Login() {
         },
         body: JSON.stringify(userData),
       });
-      console.log(JSON.stringify(userData))
+      console.log(JSON.stringify(userData));
       const data = await response.json();
-      if (response.ok) {
-        
-        localStorage.setItem("accNo", accountNumber);
+      console.log("Login response data:", data); // Check the full structure of data
 
+      if (response.ok) {
+        localStorage.setItem("accNo", accountNumber);
+        localStorage.setItem("userType", data.userType); // Store userType
         setMessage("Login successful!");
-        navigate("/dashboard");
+
+        // Navigate to the appropriate dashboard based on userType
+        if (data.userType === "Employee") {
+          navigate("/EmployeeDashboard");
+        } else {
+          navigate("/UserDashboard");
+        }
       } else {
         setMessage(`Login failed: ${data.message}`);
       }

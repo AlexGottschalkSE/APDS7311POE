@@ -25,11 +25,11 @@ app.use(express.json());
 const db = admin.firestore();
 
 app.post("/api/auth/register", async (req, res) => {
-  const { username, id, accountNumber, password } = req.body;
+  const { username, id, accountNumber, password, userType } = req.body; // Add userType to destructuring
 
-  if (!username || !id || !accountNumber || !password) {
+  if (!username || !id || !accountNumber || !password || !userType) { // Validate userType
     return res.status(400).json({
-      message: "Full Name, ID, Account Number, and Password are required",
+      message: "Full Name, ID, Account Number, Password, and User Type are required",
     });
   }
 
@@ -48,6 +48,7 @@ app.post("/api/auth/register", async (req, res) => {
       id,
       accountNumber,
       password: hashedPassword,
+      userType, // Set userType from the request
     };
 
     await userRef.set(newUser);
@@ -59,6 +60,8 @@ app.post("/api/auth/register", async (req, res) => {
     res.status(500).json({ message: "Error registering user" });
   }
 });
+
+
 
 app.post("/api/auth/login", async (req, res) => {
   const { accountNumber, username, password } = req.body;
@@ -95,7 +98,7 @@ app.post("/api/auth/login", async (req, res) => {
         .json({ message: "Invalid credentials. Incorrect password." });
     }
 
-    res.status(200).json({ message: "Login successful" });
+    res.status(200).json({ message: "Login successful", userType: user.userType });
   } catch (error) {
     console.error("Error logging in:", error);
     return res.status(500).json({ message: "Error logging in" });

@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
 import "./Register.css";
 
 function Register() {
   const [captchaVerified, setCaptchaVerified] = useState(false);
+  const navigate = useNavigate();
 
   const handleCaptchaChange = (value) => {
     setCaptchaVerified(true);
@@ -20,12 +22,14 @@ function Register() {
     const id = e.target[1].value;
     const accountNumber = e.target[2].value;
     const password = e.target[3].value;
+    const userType = e.target[4].value; // Get userType from the dropdown
 
     const userData = {
       username,
       id,
       accountNumber,
       password,
+      userType, 
     };
 
     try {
@@ -39,9 +43,12 @@ function Register() {
 
       const data = await response.json();
       if (response.ok) {
-        alert("Registration Successful!");
+        alert("Account creation successful!");
+
+        // Optionally redirect back to the dashboard or another page
+        navigate("/EmployeeDashboard");
       } else {
-        alert("Registration Failed: " + data.message);
+        alert("Account creation failed: " + data.message);
       }
     } catch (error) {
       alert("Error: " + error.message);
@@ -50,12 +57,19 @@ function Register() {
 
   return (
     <div className="card">
-      <h2>Register</h2>
+      <h2>Create an Account</h2>
       <form onSubmit={handleRegister}>
         <input type="text" placeholder="Full Name" required />
         <input type="text" placeholder="ID" required />
         <input type="text" placeholder="Account Number" required />
         <input type="password" placeholder="Password" required />
+        
+        <select required>
+          <option value="">Select User Type</option>
+          <option value="User">User</option>
+          <option value="Employee">Employee</option>
+        </select>
+        
         <ReCAPTCHA
           sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
           onChange={handleCaptchaChange}
