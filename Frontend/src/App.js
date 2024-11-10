@@ -4,6 +4,8 @@ import Register from "./Register";
 import Login from "./Login";
 import Dashboard from "./Dashboard";
 import History from "./History"
+import EmployeeDashboard from "./EmployeeDashboard"; 
+import UserDashboard from "./UserDashboard";
 import "./App.css"; 
 import Payments from "./Payment";
 import ApprovePayment from "./ApprovePayments";
@@ -55,6 +57,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/payments" element={<Payments />} /> 
+          <Route path="/EmployeeDashboard" element={<EmployeeDashboard />} /> {/* New route */}
+          <Route path="/UserDashboard" element={<UserDashboard />} />         {/* New route */}
           <Route path="/history" element={<History />}/>
           <Route path="/approve" element={<ApprovePayment />} />
         </Routes>
