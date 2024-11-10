@@ -1,7 +1,7 @@
 const express = require("express");
 const Joi = require("joi");
 const router = express.Router();
-const Payment = require("../models/payment");
+const Payment = require("../models/Payment");
 
 const paymentSchema = Joi.object({
     amount: Joi.number().greater(0).required(),
@@ -65,6 +65,21 @@ router.get("/payments/:accountNumber", async (req, res) => {
 
         if (payments.length === 0) {
             return res.status(404).send("No payments found for the given account number.");
+        }
+
+        res.status(200).send(payments);
+    } catch (error) {
+        console.error("Error retrieving payments:", error);
+        res.status(500).send("Failed to retrieve payments. Please try again.");
+    }
+});
+
+router.get("/payments", async (req, res) => {
+    try {
+        const payments = await Payment.find();
+
+        if (payments.length === 0) {
+            return res.status(404).send("No payments found.");
         }
 
         res.status(200).send(payments);

@@ -178,6 +178,37 @@ app.get("/api/payments/:accountNumber", async (req, res) => {
   }
 });
 
+app.get("/api/payments", async (req, res) => {
+    try {
+        const userRef = db.collection("users");
+        const usersSnapshot = await userRef.get();
+        
+        if (usersSnapshot.empty) {
+            return res.status(404).json({ message: "No users found." });
+        }
+
+        const allPayments = [];
+
+        for (const userDoc of usersSnapshot.docs) {
+            const paymentsSnapshot = await userDoc.ref.collection("payments").get();
+            
+            if (!paymentsSnapshot.empty) {
+                const payments = paymentsSnapshot.docs.map(doc => doc.data());
+                allPayments.push(...payments);
+            }
+        }
+
+        if (allPayments.length === 0) {
+            return res.status(404).json({ message: "No payments found for any account." });
+        }
+
+        res.status(200).json(allPayments);
+    } catch (error) {
+        console.error("Error retrieving payments:", error);
+        res.status(500).json({ message: "Error retrieving payments" });
+    }
+});
+
 
 const privateKey = fs.readFileSync("./server.key", "utf8");
 const certificate = fs.readFileSync("./server.crt", "utf8");
