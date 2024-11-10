@@ -103,9 +103,9 @@ app.post("/api/auth/login", async (req, res) => {
 });
 
 app.post("/api/payment", async (req, res) => {
-  const { amount, currency, provider, swiftCode } = req.body;
-
-  const accountNumber = req.headers["account-number"];
+    const { amount, currency, provider, swiftCode } = req.body;
+    const {approved} = false;
+    const accountNumber = req.headers['account-number'];  
 
   if (!amount || !currency || !provider || !accountNumber || !swiftCode) {
     return res.status(400).json({ message: "All fields are required." });
@@ -127,15 +127,15 @@ app.post("/api/payment", async (req, res) => {
       .json({ message: "SWIFT code must be between 8 and 11 characters." });
   }
 
-  const transactionId = `TXN${Date.now()}`;
-  const paymentData = {
-    amount,
-    currency,
-    provider,
-    accountNumber,
-    swiftCode,
-    transactionId,
-  };
+    const transactionId = `TXN${Date.now()}`;
+    const paymentData = {
+        amount,
+        currency,
+        provider,
+        accountNumber,
+        swiftCode,
+        transactionId,
+    };
 
   try {
     const usersRef = db.collection("users");
@@ -187,6 +187,7 @@ app.get("/api/payments/:accountNumber", async (req, res) => {
     res.status(500).json({ message: "Error retrieving payments" });
   }
 });
+
 
 const privateKey = fs.readFileSync("./server.key", "utf8");
 const certificate = fs.readFileSync("./server.crt", "utf8");

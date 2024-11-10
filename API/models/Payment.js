@@ -6,6 +6,7 @@ const paymentSchema = new mongoose.Schema({
   provider: { type: String, required: true },
   accountNumber: { type: String, required: true },
   swiftCode: { type: String, required: true },
+  approved: { type: Boolean, required: true },
   createdAt: { type: Date, default: Date.now },
 });
 

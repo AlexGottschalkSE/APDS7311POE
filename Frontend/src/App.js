@@ -6,6 +6,7 @@ import Dashboard from "./Dashboard";
 import History from "./History"
 import "./App.css"; 
 import Payments from "./Payment";
+import ApprovePayment from "./ApprovePayments";
 function NavBar() {
   const location = useLocation(); 
   return (
@@ -33,6 +34,9 @@ function NavBar() {
       <li>
         <Link to="/history">History</Link> 
       </li>
+      <li>
+        <Link to="/approve">Approve Payments</Link> 
+      </li>
       </>
       
         )}
@@ -52,6 +56,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/payments" element={<Payments />} /> 
           <Route path="/history" element={<History />}/>
+          <Route path="/approve" element={<ApprovePayment />} />
         </Routes>
       </div>
     </Router>

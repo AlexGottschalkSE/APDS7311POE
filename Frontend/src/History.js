@@ -47,19 +47,20 @@ const History = () => {
               <th>Amount</th>
               <th>Currency</th>
               <th>Provider</th>
-              <th>Account Number</th>
               <th>SWIFT Code</th>
+              <th>Approved?</th>
             </tr>
           </thead>
           <tbody>
             {transactions.length > 0 ? (
               transactions.map((transaction) => (
                 <tr key={transaction.transactionId}>
+                  <td>{transaction.accountNumber}</td>
                   <td>{transaction.amount}</td>
                   <td>{transaction.currency}</td>
                   <td>{transaction.provider}</td>
-                  <td>{transaction.accountNumber}</td>
                   <td>{transaction.swiftCode}</td>
+                  <td>{transaction.approved ? "Yes" : "No"}</td>
                 </tr>
               ))
             ) : (

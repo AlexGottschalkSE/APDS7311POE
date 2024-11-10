@@ -1,7 +1,7 @@
 const express = require("express");
 const Joi = require("joi");
 const router = express.Router();
-const Payment = require("../models/payment");
+const Payment = require("../models/Payment");
 
 const paymentSchema = Joi.object({
     amount: Joi.number().greater(0).required(),
@@ -24,7 +24,7 @@ router.post("/payment", async (req, res) => {
     }
 
     const { amount, currency, provider, accountNumber, swiftCode } = req.body;
-
+    const {approved} = false;
     const payment = new Payment({
         payerAccountNumber,   
         beneficiaryAccountNumber: accountNumber,  
@@ -32,6 +32,7 @@ router.post("/payment", async (req, res) => {
         currency,
         provider,
         swiftCode,
+        approved
     });
 
     const transactionId = generateTransactionId();
@@ -45,6 +46,7 @@ router.post("/payment", async (req, res) => {
             amount,
             currency,
             payerAccountNumber,
+            approved,
             beneficiaryAccountNumber: accountNumber,
         });
     } catch (err) {
