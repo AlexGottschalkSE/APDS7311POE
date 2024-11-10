@@ -24,7 +24,7 @@ router.post("/payment", async (req, res) => {
     }
 
     const { amount, currency, provider, accountNumber, swiftCode } = req.body;
-
+    const {approved} = false;
     const payment = new Payment({
         payerAccountNumber,   
         beneficiaryAccountNumber: accountNumber,  
@@ -32,6 +32,7 @@ router.post("/payment", async (req, res) => {
         currency,
         provider,
         swiftCode,
+        approved
     });
 
     const transactionId = generateTransactionId();
@@ -45,6 +46,7 @@ router.post("/payment", async (req, res) => {
             amount,
             currency,
             payerAccountNumber,
+            approved,
             beneficiaryAccountNumber: accountNumber,
         });
     } catch (err) {
@@ -65,21 +67,6 @@ router.get("/payments/:accountNumber", async (req, res) => {
 
         if (payments.length === 0) {
             return res.status(404).send("No payments found for the given account number.");
-        }
-
-        res.status(200).send(payments);
-    } catch (error) {
-        console.error("Error retrieving payments:", error);
-        res.status(500).send("Failed to retrieve payments. Please try again.");
-    }
-});
-
-router.get("/payments", async (req, res) => {
-    try {
-        const payments = await Payment.find();
-
-        if (payments.length === 0) {
-            return res.status(404).send("No payments found.");
         }
 
         res.status(200).send(payments);
