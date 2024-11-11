@@ -27,7 +27,7 @@ function Register() {
     const id = e.target[1].value;
     const accountNumber = e.target[2].value;
     const password = e.target[3].value;
-    const userType = "User"; // Get userType from the dropdown
+    const userType = "User"; 
 
     const userData = {
       username,
@@ -50,7 +50,6 @@ function Register() {
       if (response.ok) {
         alert("Account creation successful!");
 
-        // Optionally redirect back to the dashboard or another page
         navigate("/EmployeeDashboard");
       } else {
         alert("Account creation failed: " + data.message);

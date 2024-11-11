@@ -15,13 +15,12 @@ import { ThemeProvider } from "./ThemeContext";
 function NavBar() {
   const location = useLocation();
   const navigate = useNavigate();
-  const userType = localStorage.getItem("userType"); // Retrieve userType from localStorage
+  const userType = localStorage.getItem("userType"); 
 
-  // Logout function
   const handleLogout = () => {
     localStorage.removeItem("accNo");
-    localStorage.removeItem("userType"); // Clear userType from localStorage
-    navigate("/login"); // Redirect to login page
+    localStorage.removeItem("userType"); 
+    navigate("/login"); 
   };
 
   return (
@@ -97,12 +96,10 @@ function NavBar() {
 function ProtectedRoute({ children, allowedUserType }) {
   const userType = localStorage.getItem("userType");
 
-  // Redirect to login if userType is not set (i.e., user is not logged in) and accessing a protected route
   if (!userType && allowedUserType) {
     return <Navigate to="/login" replace />;
   }
 
-  // Redirect if userType does not match allowedUserType
   if (allowedUserType && userType !== allowedUserType) {
     return <Navigate to="/dashboard" replace />;
   }
@@ -110,10 +107,9 @@ function ProtectedRoute({ children, allowedUserType }) {
   return children;
 }
 
-// Adding PropTypes validation for the component props
 ProtectedRoute.propTypes = {
-  children: PropTypes.node.isRequired,      // children prop validation
-  allowedUserType: PropTypes.string         // allowedUserType is optional and string type
+  children: PropTypes.node.isRequired,      
+  allowedUserType: PropTypes.string         
 };
 
 function App() {

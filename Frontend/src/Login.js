@@ -32,14 +32,12 @@ function Login() {
       });
 
       const data = await response.json();
-      console.log("Login response data:", data); // Debugging output
 
       if (response.ok) {
         localStorage.setItem("accNo", accountNumber);
         localStorage.setItem("userType", data.userType); 
         setMessage("Login successful!");
 
-        // Navigate based on userType
         if (data.userType === "Employee") {
           navigate("/EmployeeDashboard");
         } else {
@@ -49,7 +47,7 @@ function Login() {
         setMessage(`Login failed: ${data.message}`);
       }
     } catch (error) {
-      console.error("Login error:", error); // Logs the error for debugging
+      console.error("Login error:", error); 
       setMessage(`Error: ${error.message}`);
     }
   };

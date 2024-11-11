@@ -11,10 +11,8 @@ export function ThemeProvider({ children }) {
     const themeClass = isDarkMode ? 'dark-mode' : 'light-mode';
     document.body.classList.add(themeClass);
     
-    // Remove the opposite theme class to prevent conflicts
     document.body.classList.remove(isDarkMode ? 'light-mode' : 'dark-mode');
 
-    // Update localStorage
     localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
   }, [isDarkMode]);
 
