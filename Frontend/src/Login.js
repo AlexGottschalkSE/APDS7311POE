@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { json, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./Login.css";
 
 function Login() {
@@ -9,9 +9,9 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    const accountNumber = e.target[0].value;          
-    const username = e.target[1].value;    
-    const password = e.target[2].value;    
+    const accountNumber = e.target.elements.accountNumber.value;
+    const username = e.target.elements.username.value;
+    const password = e.target.elements.password.value;
 
     const userData = {
       accountNumber,
@@ -27,16 +27,16 @@ function Login() {
         },
         body: JSON.stringify(userData),
       });
-      console.log(JSON.stringify(userData));
+
       const data = await response.json();
-      console.log("Login response data:", data); // Check the full structure of data
+      console.log("Login response data:", data); // Debugging output
 
       if (response.ok) {
         localStorage.setItem("accNo", accountNumber);
-        localStorage.setItem("userType", data.userType); // Store userType
+        localStorage.setItem("userType", data.userType); 
         setMessage("Login successful!");
 
-        // Navigate to the appropriate dashboard based on userType
+        // Navigate based on userType
         if (data.userType === "Employee") {
           navigate("/EmployeeDashboard");
         } else {
@@ -46,6 +46,7 @@ function Login() {
         setMessage(`Login failed: ${data.message}`);
       }
     } catch (error) {
+      console.error("Login error:", error); // Logs the error for debugging
       setMessage(`Error: ${error.message}`);
     }
   };
@@ -54,9 +55,9 @@ function Login() {
     <div className="card">
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
-        <input type="text" placeholder="ID" required /> 
-        <input type="text" placeholder="Full Name" required /> 
-        <input type="password" placeholder="Password" required /> 
+        <input type="text" name="accountNumber" placeholder="ID" required />
+        <input type="text" name="username" placeholder="Full Name" required />
+        <input type="password" name="password" placeholder="Password" required />
         <button type="submit">Login</button>
       </form>
       {message && <p>{message}</p>}
