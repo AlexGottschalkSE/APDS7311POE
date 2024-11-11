@@ -10,6 +10,7 @@ import UserDashboard from "./UserDashboard";
 import Payments from "./Payment";
 import ApprovePayment from "./ApprovePayments";
 import "./App.css"; 
+import { ThemeProvider } from "./ThemeContext";
 
 function NavBar() {
   const location = useLocation();
@@ -24,6 +25,7 @@ function NavBar() {
   };
 
   return (
+    <ThemeProvider>
     <nav className="nav-bar">
       <ul>
         {/* Show Login link only if userType is null (user not logged in) */}
@@ -65,7 +67,7 @@ function NavBar() {
                 </li>
               </>
             )}
-
+            
             {/* Accessible Logout Button */}
             <li>
               <button 
@@ -88,6 +90,7 @@ function NavBar() {
         )}
       </ul>
     </nav>
+    </ThemeProvider>
   );
 }
 
@@ -116,6 +119,7 @@ ProtectedRoute.propTypes = {
 function App() {
   return (
     <Router>
+      <ThemeProvider>
       <div className="app-container">
         <NavBar /> 
         <Routes>
@@ -134,6 +138,7 @@ function App() {
           <Route path="/approve" element={<ProtectedRoute allowedUserType="Employee"><ApprovePayment /></ProtectedRoute>} />
         </Routes>
       </div>
+      </ThemeProvider>
     </Router>
   );
 }
