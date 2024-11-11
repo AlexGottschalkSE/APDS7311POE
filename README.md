@@ -1,6 +1,6 @@
 APDS7311 POE README
 
-GitHub repo Link: https://github.com/AlexGottschalkSE/APDS7311POE
+GitHub repo Link: https://github.com/AndrewTroll/APDS7311POE
 
 Video Submission Link: https://youtu.be/sqeeRX1bqds
 
@@ -15,7 +15,9 @@ Save the changes, then use "node server.js" to run the API. THE API WILL NOT BE 
 
 When running the program, if the application has issues fetching the data via the API, but the API is functioning as intended when tested in Postman, it is likely an issue with the .crt files. This is an issue that seems to ony affect some machines, while not affecting others. There are a few potential fixes:
 
-1. Installing the Self-Signed Certificate on Windows
+1. Run the api, and attempt to call the login api call using https://localhost:443/api/auth/login in the url. This will likely bring up a warning saying that the url isn't secure. Once you see this message, select the option to proceeed to localhost, (trust the link), the api call will not work, but once the ssl is trusted, the application should be able to operate without issues.
+
+2. Installing the Self-Signed Certificate on Windows
 Double-click the server.crt file to open the Certificate Import Wizard.
 Select Local Machine (you may need admin privileges).
 Choose Place all certificates in the following store.
@@ -24,12 +26,12 @@ Complete the wizard by clicking Next, then Finish.
 Restart any browsers or applications that need to recognize the new certificate.
 then try locally
 
-2. Clear cache
+3. Clear cache
 If step one is completed and does not work, try to clear the cache of your browser.
 
-3. Open the application in an incognito browser tab
+4. Open the application in an incognito browser tab
 
-4. --ignore-certificate-errors Browser
+5. --ignore-certificate-errors Browser
 If all other options do not work, navigate to your Google chrome browser file in file explorer.
 This will likely be found in Program Files or Program Files(x86).
 This will most likely look like this: 
@@ -44,9 +46,14 @@ To run the Frontend, open an integrated terminal in Visual Studio Code for the F
 The program is run locally, but the database is hosted via Firebase.
 
 Using the Program:
-Upon startup of the application, the user is presented with the options to either register or login. If markers wish to make use of an existing login please use the following login details:
-"accountNumber":"1234","username":"Test","password":"Password1"
+Upon startup of the application, the user is presented with the options to either register or login. The register function will only register new customers. 
 
-Otherwise, the user can register their own account. The user must enter valid information, as if any information is missing or invalid, the user will be prompted to correct the missing details.
+The customer can register their own account. The user must enter valid information, as if any information is missing or invalid, the user will be prompted to correct the missing details.
 Upon logging in the user will be presented with the option to make a payment, upon entering valid payment details, as invalid details will make the application prompt the user to renter the payment details, the payment will be saved and a transaction ID will be presented.
 From the dashboard, the user can also navigate to the Transaction History page. Upon loading the page, the application will display all previous transaction made by the currently logged in user.
+The Dashboard also has an optional dark mode toggle. Clicking this will switch the UI to dark mode, and back to light mode when pressed again.
+
+Employee's are pre-registered in the system and cannot be registered in the application. The markers can make use of the existing login below to test the employee portal:
+"accountNumber":"1234","username":"Test","password":"Password1"
+
+Upon logging into the employee portal, the user will be presented with the employee dashboard. This has the same dark mode toggle as the customer portal. The employee can then navigate to the approve payments page. This will load a list of all payment requests. Upon the employee verifying that the payment details are valid, the employee can then click the approve button to approve the transaction in the database, allowing SWIFT to proceed with the transaction.
