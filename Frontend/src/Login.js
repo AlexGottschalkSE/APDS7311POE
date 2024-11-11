@@ -56,7 +56,7 @@ function Login() {
     <div className="card">
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
-        <input type="text" name="accountNumber" placeholder="ID" required />
+        <input type="text" name="accountNumber" placeholder="Account Number" required />
         <input type="text" name="username" placeholder="Full Name" required />
         <input type="password" name="password" placeholder="Password" required />
         <button type="submit">Login</button>
