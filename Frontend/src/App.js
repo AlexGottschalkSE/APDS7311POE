@@ -57,14 +57,23 @@ function NavBar() {
               </>
             )}
 
-            {/* Logout Link */}
+            {/* Accessible Logout Button */}
             <li>
-              <span 
+              <button 
                 onClick={handleLogout} 
-                style={{ cursor: 'pointer', textDecoration: 'underline', color: 'blue' }}
+                style={{ 
+                  cursor: 'pointer', 
+                  textDecoration: 'underline', 
+                  color: 'blue', 
+                  background: 'none', 
+                  border: 'none', 
+                  padding: 0, 
+                  font: 'inherit' 
+                }}
+                aria-label="Logout"
               >
                 Logout
-              </span>
+              </button>
             </li>
           </>
         )}
@@ -72,6 +81,7 @@ function NavBar() {
     </nav>
   );
 }
+
 function ProtectedRoute({ children, allowedUserType }) {
   const userType = localStorage.getItem("userType");
 
