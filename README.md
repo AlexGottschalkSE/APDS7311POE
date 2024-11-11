@@ -2,7 +2,7 @@ APDS7311 POE README
 
 GitHub repo Link: https://github.com/AndrewTroll/APDS7311POE
 
-Video Submission Link: https://youtu.be/sqeeRX1bqds
+Video Submission Link: https://youtu.be/MhUT9oaw-Dg
 
 Running the program:
 To obtain the files for the application, follow the GitHub repo link https://github.com/AlexGottschalkSE/APDS7311POE to find the repository. From there click the Green code button and select the method of accessing the code. It is recommended to click access via GitHub Desktop, and then open it in Visual Studio Code.
