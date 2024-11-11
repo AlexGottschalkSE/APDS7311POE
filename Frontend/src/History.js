@@ -10,10 +10,15 @@ const History = () => {
   const navigate = useNavigate(); 
   const [message, setMessage] = useState("");
   const accountNumber = localStorage.getItem("accNo");
+  const userType = localStorage.getItem("userType");
 
   useEffect(() => {
 
     if (!accountNumber) {
+      setMessage("Redirecting to login...");
+      navigate("/login");  
+    }
+    if (userType != "User") {
       setMessage("Redirecting to login...");
       navigate("/login");  
     }
@@ -55,7 +60,6 @@ const History = () => {
             {transactions.length > 0 ? (
               transactions.map((transaction) => (
                 <tr key={transaction.transactionId}>
-                  <td>{transaction.accountNumber}</td>
                   <td>{transaction.amount}</td>
                   <td>{transaction.currency}</td>
                   <td>{transaction.provider}</td>

@@ -18,6 +18,7 @@ function NavBar() {
 
   // Logout function
   const handleLogout = () => {
+    localStorage.removeItem("accNo");
     localStorage.removeItem("userType"); // Clear userType from localStorage
     navigate("/login"); // Redirect to login page
   };
@@ -27,16 +28,23 @@ function NavBar() {
       <ul>
         {/* Show Login link only if userType is null (user not logged in) */}
         {!userType && (
+          <>
           <li>
             <Link to="/login">Login</Link>
           </li>
+          <li>
+          <Link to="/register">Create An Account</Link>
+          </li>
+          </>
         )}
         
         {/* Common Links for all logged-in users */}
         {userType && location.pathname !== "/login" && location.pathname !== "/register" && (
           <>
-            <li>
-              <Link to="/dashboard">Dashboard</Link>
+          {userType === "User" &&(
+            <>
+              <li>
+              <Link to="/UserDashboard">Dashboard</Link>
             </li>
             <li>
               <Link to="/payments">Payments</Link> 
@@ -44,12 +52,13 @@ function NavBar() {
             <li>
               <Link to="/history">History</Link> 
             </li>
-
+            </>
+          )}
             {/* Conditionally Render Approve Payments Link for Employees */}
             {userType === "Employee" && (
               <>
                 <li>
-                  <Link to="/register">Create A new User</Link>
+                  <Link to="/EmployeeDashboard">Dashboard</Link>
                 </li>
                 <li>
                   <Link to="/approve">Approve Payments</Link>

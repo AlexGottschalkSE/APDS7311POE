@@ -10,6 +10,7 @@ const Approve = () => {
   const navigate = useNavigate(); 
   const [message, setMessage] = useState("");
   const accountNumber = localStorage.getItem("accNo");
+  const userType = localStorage.getItem("userType");
   const updatePaymentStatus = async (transactionId, approved) => {
     try {
       await fetch(`https://localhost:443/api/approve/${transactionId}`, {
@@ -29,6 +30,10 @@ const Approve = () => {
       setMessage("Redirecting to login...");
       navigate("/login");  
     }
+    if (userType != "Employee") {
+        setMessage("Redirecting to login...");
+        navigate("/login");  
+      }
     if (accountNumber) {
       axios
         .get(`https://localhost:443/api/payments`)

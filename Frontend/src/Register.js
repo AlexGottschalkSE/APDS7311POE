@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
 import "./Register.css";
@@ -6,6 +6,11 @@ import "./Register.css";
 function Register() {
   const [captchaVerified, setCaptchaVerified] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(()=> {
+    localStorage.removeItem("accNo");
+    localStorage.removeItem("userType");
+  })
 
   const handleCaptchaChange = (value) => {
     setCaptchaVerified(true);
@@ -22,7 +27,7 @@ function Register() {
     const id = e.target[1].value;
     const accountNumber = e.target[2].value;
     const password = e.target[3].value;
-    const userType = e.target[4].value; // Get userType from the dropdown
+    const userType = "User"; // Get userType from the dropdown
 
     const userData = {
       username,
@@ -64,11 +69,6 @@ function Register() {
         <input type="text" placeholder="Account Number" required />
         <input type="password" placeholder="Password" required />
         
-        <select required>
-          <option value="">Select User Type</option>
-          <option value="User">User</option>
-          <option value="Employee">Employee</option>
-        </select>
         
         <ReCAPTCHA
           sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"

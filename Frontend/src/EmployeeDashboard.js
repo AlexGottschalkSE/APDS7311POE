@@ -7,9 +7,11 @@ function EmployeeDashboard() {
   const navigate = useNavigate();
   useEffect(() => {
     const accountNumber = localStorage.getItem("accNo");
-     
+    const userType = localStorage.getItem("userType");
     if (!accountNumber) {
-      setMessage("Redirecting to login...");
+      navigate("/login");  
+    }
+    if (userType !="Employee") {
       navigate("/login");  
     }
   }, [navigate]); 
