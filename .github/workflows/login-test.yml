@@ -23,13 +23,15 @@ jobs:
         working-directory: ./Frontend  # Navigate to Frontend directory to install dependencies
         run: npm install
 
-      - name: Run tests
+      - name: Run tests and save results to JSON
         working-directory: ./Frontend  # Ensure tests run in the Frontend directory
-        run: npm test -- --testPathPattern=src/Login.test.js  # Specify Login.test.js to run only this test
+        run: |
+          mkdir -p ./test-results  # Create directory for test results if it doesn't exist
+          npm test -- --testPathPattern=src/Login.test.js --outputFile=./test-results/jest-results.json --json  # Run tests and save results as JSON
 
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v3
         with:
           name: test-results
-          path: ./Frontend/test-results  # Adjust path if test results are stored here
+          path: ./Frontend/test-results/jest-results.json  # Path to the JSON test results file
