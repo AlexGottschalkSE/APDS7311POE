@@ -98,7 +98,7 @@ app.post("/api/auth/login", async (req, res) => {
         .json({ message: "Invalid credentials. Incorrect password." });
     }
 
-    res.status(200).json({ message: "Login successful", userType: user.userType });
+    res.status(200).json({ message: "Login successful", userType: user.userType, id: user.id });
   } catch (error) {
     console.error("Error logging in:", error);
     return res.status(500).json({ message: "Error logging in" });

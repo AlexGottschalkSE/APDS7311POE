@@ -9,7 +9,7 @@ const History = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate(); 
   const [message, setMessage] = useState("");
-  const accountNumber = localStorage.getItem("accNo");
+  const accountNumber = localStorage.getItem("id");
   const userType = localStorage.getItem("userType");
 
   useEffect(() => {

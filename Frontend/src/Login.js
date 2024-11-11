@@ -36,6 +36,7 @@ function Login() {
       if (response.ok) {
         localStorage.setItem("accNo", accountNumber);
         localStorage.setItem("userType", data.userType); 
+        localStorage.setItem("id", data.id)
         setMessage("Login successful!");
 
         if (data.userType === "Employee") {
@@ -53,7 +54,7 @@ function Login() {
   };
 
   return (
-    <div className="card">
+    <div className="card" style={{ backgroundColor: 'lightblue' }}>
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
         <input type="text" name="accountNumber" placeholder="Account Number" required />

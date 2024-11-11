@@ -60,7 +60,7 @@ function Register() {
   };
 
   return (
-    <div className="card">
+    <div className="card" style={{ backgroundColor: 'lightblue' }}>
       <h2>Create an Account</h2>
       <form onSubmit={handleRegister}>
         <input type="text" placeholder="Full Name" required />

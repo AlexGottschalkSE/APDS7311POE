@@ -78,7 +78,7 @@ function Payments() {
   };
 
   return (
-    <div className="card">
+    <div className="card" style={{ backgroundColor: 'lightblue' }}>
       <h2>Make a Payment</h2>
       <form onSubmit={handlePayment}>
         <input type="number" placeholder="Amount" required />
