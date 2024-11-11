@@ -4,6 +4,10 @@ GitHub repo Link: https://github.com/AndrewTroll/APDS7311POE
 
 Video Submission Link: https://youtu.be/MhUT9oaw-Dg
 
+CirclCI: https://app.circleci.com/pipelines/circleci/GDqK4rsaJmTgBMssB5RivR/VYwRCj3e1gxUxcpoHWsW6C/27/workflows/80334111-7ef5-4873-a54f-4e602a1780da/jobs/44/steps
+
+SonarQube: https://sonarcloud.io/project/overview?id=AndrewTroll_APDS7311POE
+
 Running the program:
 To obtain the files for the application, follow the GitHub repo link https://github.com/AlexGottschalkSE/APDS7311POE to find the repository. From there click the Green code button and select the method of accessing the code. It is recommended to click access via GitHub Desktop, and then open it in Visual Studio Code.
 
