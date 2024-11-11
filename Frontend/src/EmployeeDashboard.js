@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 
 function EmployeeDashboard() {
-  const [message, setMessage] = useState("");
+  const [setMessage] = useState("");
   const navigate = useNavigate();
   useEffect(() => {
     const accountNumber = localStorage.getItem("accNo");

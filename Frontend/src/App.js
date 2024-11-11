@@ -4,6 +4,7 @@ import Register from "./Register";
 import Login from "./Login";
 import Dashboard from "./Dashboard";
 import History from "./History";
+import PropTypes from "prop-types"; 
 import EmployeeDashboard from "./EmployeeDashboard";
 import UserDashboard from "./UserDashboard";
 import Payments from "./Payment";
@@ -71,7 +72,6 @@ function NavBar() {
     </nav>
   );
 }
-
 function ProtectedRoute({ children, allowedUserType }) {
   const userType = localStorage.getItem("userType");
 
@@ -87,6 +87,12 @@ function ProtectedRoute({ children, allowedUserType }) {
 
   return children;
 }
+
+// Adding PropTypes validation for the component props
+ProtectedRoute.propTypes = {
+  children: PropTypes.node.isRequired,      // children prop validation
+  allowedUserType: PropTypes.string         // allowedUserType is optional and string type
+};
 
 function App() {
   return (
