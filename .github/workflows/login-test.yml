@@ -1,0 +1,35 @@
+# File: .github/workflows/login-test.yml
+name: Login Component Tests
+
+on:
+  push:
+    branches:
+      - '**'  # Runs on any branch push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        working-directory: ./Frontend  # Navigate to Frontend directory to install dependencies
+        run: npm install
+
+      - name: Run tests
+        working-directory: ./Frontend  # Ensure tests run in the Frontend directory
+        run: npm test -- --testPathPattern=src/Login.test.js  # Specify Login.test.js to run only this test
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: ./Frontend/test-results  # Adjust path if test results are stored here
